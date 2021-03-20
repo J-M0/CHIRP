@@ -17,18 +17,18 @@ jobs:
 
       - name: Compile
         run: |
-          py -m pip install -e .
-          py -m nuitka --onefile chirp.py --windows-onefile-tempdir --plugin-enable=multiprocessing --plugin-enable=pylint-warnings --windows-uac-admin --assume-yes-for-downloads --windows-icon-from-ico=.\assets\CISA_Logo.ico
+          py -m pip install -e .[compile]
+          py -m nuitka --onefile chirp --windows-onefile-tempdir --plugin-enable=multiprocessing --plugin-enable=pylint-warnings --windows-uac-admin --assume-yes-for-downloads --windows-icon-from-ico=.\assets\CISA_Logo.ico
 
       - name: Hash
         id: hash
         run: |
-          Get-ChildItem -Recurse -Path @('chirp.exe', 'chirp.py', 'chirp\*.py') -Exclude "chirp.dist"| %{Get-FileHash $_ |  Export-Csv  -Path 'hashes.csv' -Append -NoTypeInformation} 2>&1 | Out-Null
+          Get-ChildItem -Recurse -Path @('chirp.exe', 'chirp\*.py') -Exclude "chirp.dist"| %{Get-FileHash $_ |  Export-Csv  -Path 'hashes.csv' -Append -NoTypeInformation} 2>&1 | Out-Null
 
       - name: Bundle
         run: |
           $compress = @{
-          LiteralPath= ".\README.md", ".\chirp.exe", ".\indicators", "chirp.py", ".\chirp", "LICENSE", "setup.py"
+          LiteralPath= ".\README.md", ".\chirp.exe", ".\indicators", ".\chirp", "LICENSE", "setup.py"
           CompressionLevel = "Optimal"
           DestinationPath = ".\chirp.zip"
           }

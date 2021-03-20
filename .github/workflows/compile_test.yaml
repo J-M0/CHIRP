@@ -16,16 +16,16 @@ jobs:
 
       - name: Install Requirements
         run: |
-          py -m pip install -e .
+          py -m pip install -e .[compile]
 
       - name: Compile
         run: |
-          py -m nuitka --onefile chirp.py --windows-onefile-tempdir --plugin-enable=multiprocessing --plugin-enable=pylint-warnings --windows-uac-admin --assume-yes-for-downloads --windows-icon-from-ico=.\assets\CISA_Logo.ico
+          py -m nuitka --onefile chirp --windows-onefile-tempdir --plugin-enable=multiprocessing --plugin-enable=pylint-warnings --windows-uac-admin --assume-yes-for-downloads --windows-icon-from-ico=.\assets\CISA_Logo.ico
 
       - name: Bundle
         run: |
           $compress = @{
-              LiteralPath= ".\README.md", ".\chirp.exe", ".\indicators", "chirp.py", ".\chirp", "LICENSE", "setup.py"
+              LiteralPath= ".\README.md", ".\chirp.exe", ".\indicators", ".\chirp", "LICENSE", "setup.py"
               CompressionLevel = "Optimal"
               DestinationPath = ".\chirp.zip"
               }
