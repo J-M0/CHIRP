@@ -49,6 +49,9 @@ setup(
         "chirp.plugins.yara",
         "chirp.plugins.network",
     ],
+    entry_points={
+        "console_scripts": "chirp=chirp.__main__:main",
+    },
     install_requires=[
         "python-evtx; platform_system == 'Windows'",
         "yara-python",

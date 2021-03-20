@@ -1,24 +1,24 @@
-"""Main method for CHIRP (Used when compiled)."""
+"""Main entrypoint for CHIRP."""
 
 # Standard Python Libraries
 from multiprocessing import freeze_support
 import os
 import sys
 import time
+from typing import NoReturn
 
 # cisagov Libraries
 from chirp import run
 from chirp.common import CONSOLE, ERROR, OUTPUT_DIR, save_log
 
-if __name__ == "__main__":
+
+def main() -> NoReturn:
     try:
         freeze_support()
         run.run()
         time.sleep(2)
         CONSOLE(
-            "[green][+][/green] DONE! Your results can be found in {}. Press any key to exit.".format(
-                os.path.abspath(OUTPUT_DIR)
-            )
+            f"[green][+][/green] DONE! Your results can be found in {os.path.abspath(OUTPUT_DIR)}. Press any key to exit."
         )
         input()
         save_log()
@@ -27,3 +27,7 @@ if __name__ == "__main__":
         ERROR("Received an escape sequence. Goodbye.")
         save_log()
         sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
