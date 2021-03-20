@@ -2,42 +2,13 @@
 
 # Standard Python Libraries
 import sys
+import platform
 
 # Third-Party Libraries
 from setuptools import setup
 
-
-def _get_platform():
-    if sys.platform == "darwin":
-        return "MacOS"
-    elif "win" in sys.platform:
-        return "Windows"
-    elif sys.platform == "linux":
-        return "Linux"
-    else:
-        return "UNSUPPORTED"
-
-
-OS = _get_platform()
-REQ = None
-
-if OS == "Windows":
-    REQ = [
-        "nuitka",
-        "python-evtx",
-        "yara-python",
-        "rich",
-        "pyyaml",
-        "psutil",
-        "xmljson",
-        "aiomultiprocess",
-    ]
-elif OS in ["Linux", "MacOS"]:
-    REQ = ["nuitka", "yara-python", "rich", "pyyaml", "psutil", "aiomultiprocess"]
-else:
-    raise OSError(
-        "The operating system {} is not supported by chirp.".format(sys.platform)
-    )
+if platform.system() not in ("Windows", "Darwin", "Linux"):
+    sys.exit(f"The operating system {platform.system()} is not supported by chirp.")
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -78,6 +49,17 @@ setup(
         "chirp.plugins.yara",
         "chirp.plugins.network",
     ],
-    install_requires=REQ,
+    install_requires=[
+        "python-evtx; platform_system == 'Windows'",
+        "yara-python",
+        "rich",
+        "pyyaml",
+        "psutil",
+        "xmljson; platform_system == 'Windows'",
+        "aiomultiprocess",
+    ],
+    extras_require={
+          "compile": "nuitka",
+    },
     python_requires=">=3.6",
 )
